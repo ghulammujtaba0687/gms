@@ -25,5 +25,9 @@ class AppServiceProvider extends ServiceProvider
                 return true;
             }
         });
+
+        Gate::after(function ($user, $ability) {
+            return $user->hasPermission($ability);
+        });
     }
 }
