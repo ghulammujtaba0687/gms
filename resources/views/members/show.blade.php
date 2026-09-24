@@ -144,6 +144,49 @@
         </div>
     @endif
 
+    <!-- Attendance History Section -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
+        <div class="flex justify-between items-center border-b pb-3">
+            <h3 class="text-md font-bold text-gray-800">Attendance History</h3>
+            @can('checkIn', App\Models\Attendance::class)
+                <a href="{{ route('attendances.create', ['member_id' => $member->id]) }}" class="bg-green-600 hover:bg-green-700 text-white text-xs font-medium px-3 py-1.5 rounded shadow-sm">
+                    + Check-In Member
+                </a>
+            @endcan
+        </div>
+
+        <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+            <thead class="bg-gray-50 text-gray-600 font-medium">
+                <tr>
+                    <th class="px-4 py-2">Date</th>
+                    <th class="px-4 py-2">Check-In Time</th>
+                    <th class="px-4 py-2">Check-Out Time</th>
+                    <th class="px-4 py-2">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @forelse($member->attendances()->latest('check_in_time')->take(10)->get() as $att)
+                    <tr>
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ $att->check_in_date->format('Y-m-d') }}</td>
+                        <td class="px-4 py-3 font-mono text-gray-900">{{ $att->check_in_time->format('h:i A') }}</td>
+                        <td class="px-4 py-3 font-mono text-gray-900">{{ $att->check_out_time ? $att->check_out_time->format('h:i A') : '—' }}</td>
+                        <td class="px-4 py-3">
+                            @if($att->status === 'present')
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-bold">Present (In Gym)</span>
+                            @else
+                                <span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full font-medium">Checked Out</span>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="px-4 py-3 text-center text-gray-500">No attendance history found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
     <!-- Active & Past Memberships Section -->
     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
         <div class="flex justify-between items-center border-b pb-3">

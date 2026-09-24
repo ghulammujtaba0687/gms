@@ -19,6 +19,12 @@
             </a>
         @endcan
 
+        @can('viewAny', App\Models\Attendance::class)
+            <a href="{{ route('attendances.index') }}" class="block px-3 py-2 rounded-md hover:bg-slate-800 text-sm font-medium {{ request()->routeIs('attendances.*') ? 'bg-slate-800 text-white' : 'text-slate-300' }}">
+                Daily Attendance
+            </a>
+        @endcan
+
         @can('viewAny', App\Models\Payment::class)
             <a href="{{ route('payments.index') }}" class="block px-3 py-2 rounded-md hover:bg-slate-800 text-sm font-medium {{ request()->routeIs('payments.*') ? 'bg-slate-800 text-white' : 'text-slate-300' }}">
                 Payments & Dues
