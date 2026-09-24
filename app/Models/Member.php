@@ -57,6 +57,16 @@ class Member extends Model
         return $this->hasMany(Membership::class);
     }
 
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function getTotalOutstandingDuesAttribute(): float
+    {
+        return (float) $this->payments()->where('remaining_balance', '>', 0)->whereIn('status', ['paid', 'partial', 'pending_verification'])->sum('remaining_balance');
+    }
+
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
