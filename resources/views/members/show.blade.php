@@ -129,6 +129,21 @@
         </div>
     </div>
 
+    <!-- Financial Dues Summary Card -->
+    @if($member->total_outstanding_dues > 0)
+        <div class="bg-red-50 p-4 rounded-lg border border-red-200 flex justify-between items-center">
+            <div>
+                <span class="text-xs text-red-600 font-bold uppercase block">Outstanding Dues Balance</span>
+                <span class="text-xl font-bold text-red-700">PKR {{ number_format($member->total_outstanding_dues, 2) }}</span>
+            </div>
+            @can('create', App\Models\Payment::class)
+                <a href="{{ route('payments.create', ['member_id' => $member->id]) }}" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded shadow-sm">
+                    Clear Dues / Pay
+                </a>
+            @endcan
+        </div>
+    @endif
+
     <!-- Active & Past Memberships Section -->
     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
         <div class="flex justify-between items-center border-b pb-3">

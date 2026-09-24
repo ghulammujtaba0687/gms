@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipPlanController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\CheckBranchAccess;
 use App\Http\Middleware\EnsureBranchContext;
 use App\Http\Middleware\EnsureUserIsActive;
@@ -45,4 +46,10 @@ Route::middleware(['auth', EnsureUserIsActive::class, EnsureBranchContext::class
     // Member Subscriptions (Phase 4)
     Route::post('/memberships/{membership}/cancel', [MembershipController::class, 'cancel'])->name('memberships.cancel');
     Route::resource('memberships', MembershipController::class)->except(['edit', 'update']);
+
+    // Payments & Dues Management (Phase 5)
+    Route::post('/payments/{payment}/verify', [PaymentController::class, 'verify'])->name('payments.verify');
+    Route::post('/payments/{payment}/refund', [PaymentController::class, 'refund'])->name('payments.refund');
+    Route::get('/payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
+    Route::resource('payments', PaymentController::class)->except(['edit', 'update', 'destroy']);
 });
