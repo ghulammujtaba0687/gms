@@ -5,6 +5,7 @@ use App\Http\Controllers\BranchContextController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipPlanController;
 use App\Http\Middleware\CheckBranchAccess;
 use App\Http\Middleware\EnsureBranchContext;
@@ -40,4 +41,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, EnsureBranchContext::class
     // Membership Plans Catalog Management
     Route::post('/membership-plans/{id}/restore', [MembershipPlanController::class, 'restore'])->name('membership-plans.restore');
     Route::resource('membership-plans', MembershipPlanController::class)->except(['show']);
+
+    // Member Subscriptions (Phase 4)
+    Route::post('/memberships/{membership}/cancel', [MembershipController::class, 'cancel'])->name('memberships.cancel');
+    Route::resource('memberships', MembershipController::class)->except(['edit', 'update']);
 });
