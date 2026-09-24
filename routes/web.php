@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BranchContextController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipPlanController;
@@ -52,4 +53,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, EnsureBranchContext::class
     Route::post('/payments/{payment}/refund', [PaymentController::class, 'refund'])->name('payments.refund');
     Route::get('/payments/{payment}/receipt', [PaymentController::class, 'receipt'])->name('payments.receipt');
     Route::resource('payments', PaymentController::class)->except(['edit', 'update', 'destroy']);
+
+    // Attendance & Member Check-In (Phase 6)
+    Route::post('/attendances/{attendance}/checkout', [AttendanceController::class, 'checkout'])->name('attendances.checkout');
+    Route::resource('attendances', AttendanceController::class)->except(['show']);
 });

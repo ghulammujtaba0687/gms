@@ -65,4 +65,9 @@ class Membership extends Model
     {
         return $this->belongsTo(User::class, 'cancelled_by');
     }
+
+    public function attendances(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
 }
