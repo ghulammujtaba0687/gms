@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BranchContextController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MembershipPlanController;
 use App\Http\Middleware\CheckBranchAccess;
 use App\Http\Middleware\EnsureBranchContext;
 use App\Http\Middleware\EnsureUserIsActive;
@@ -30,4 +32,12 @@ Route::middleware(['auth', EnsureUserIsActive::class, EnsureBranchContext::class
 
     // Branch Management
     Route::resource('branches', BranchController::class)->except(['show', 'destroy']);
+
+    // Member Management
+    Route::post('/members/{id}/restore', [MemberController::class, 'restore'])->name('members.restore');
+    Route::resource('members', MemberController::class);
+
+    // Membership Plans Catalog Management
+    Route::post('/membership-plans/{id}/restore', [MembershipPlanController::class, 'restore'])->name('membership-plans.restore');
+    Route::resource('membership-plans', MembershipPlanController::class)->except(['show']);
 });

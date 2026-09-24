@@ -28,6 +28,7 @@ class RoleAndPermissionSeeder extends Seeder
             'staff.manage' => 'Manage Staff',
             'members.view' => 'View Members',
             'members.manage' => 'Manage Members',
+            'membership_plans.manage' => 'Manage Membership Plans',
             'memberships.manage' => 'Manage Memberships',
             'payments.manage' => 'Manage Payments',
             'attendance.manage' => 'Manage Attendance',
@@ -49,8 +50,8 @@ class RoleAndPermissionSeeder extends Seeder
         $managerRole->permissions()->sync(
             Permission::whereIn('name', [
                 'branches.view', 'staff.view', 'members.view', 'members.manage',
-                'memberships.manage', 'payments.manage', 'attendance.manage',
-                'expenses.manage', 'reports.view',
+                'membership_plans.manage', 'memberships.manage', 'payments.manage',
+                'attendance.manage', 'expenses.manage', 'reports.view',
             ])->get()
         );
 

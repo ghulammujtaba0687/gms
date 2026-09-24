@@ -7,6 +7,18 @@
             Dashboard
         </a>
 
+        @can('members.view')
+            <a href="{{ route('members.index') }}" class="block px-3 py-2 rounded-md hover:bg-slate-800 text-sm font-medium {{ request()->routeIs('members.*') ? 'bg-slate-800 text-white' : 'text-slate-300' }}">
+                Members
+            </a>
+        @endcan
+
+        @can('viewAny', App\Models\MembershipPlan::class)
+            <a href="{{ route('membership-plans.index') }}" class="block px-3 py-2 rounded-md hover:bg-slate-800 text-sm font-medium {{ request()->routeIs('membership-plans.*') ? 'bg-slate-800 text-white' : 'text-slate-300' }}">
+                Membership Plans
+            </a>
+        @endcan
+
         @can('branches.view')
             <a href="{{ route('branches.index') }}" class="block px-3 py-2 rounded-md hover:bg-slate-800 text-sm font-medium {{ request()->routeIs('branches.*') ? 'bg-slate-800 text-white' : 'text-slate-300' }}">
                 Branches

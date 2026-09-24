@@ -11,7 +11,7 @@ trait BelongsToBranch
     public static function bootBelongsToBranch(): void
     {
         static::creating(function ($model) {
-            if (! $model->branch_id && session()->has('active_branch_id')) {
+            if (! array_key_exists('branch_id', $model->getAttributes()) && session()->has('active_branch_id')) {
                 $model->branch_id = session('active_branch_id');
             }
         });
@@ -19,19 +19,42 @@ trait BelongsToBranch
         static::addGlobalScope('branch_scope', function (Builder $builder) {
             if (auth()->check()) {
                 $user = auth()->user();
+                $table = $builder->getModel()->getTable();
+                $supportsGlobal = in_array('branch_id', $builder->getModel()->getFillable()) && method_exists($builder->getModel(), 'isGlobal');
 
                 if ($user->hasRole('owner')) {
-                    // If owner selected a specific branch context, scope to it. Otherwise (All Branches mode), don't scope.
+                    // If owner selected a specific branch context
                     if (session()->has('active_branch_id') && session('active_branch_id') !== null) {
-                        $builder->where($builder->getModel()->getTable().'.branch_id', session('active_branch_id'));
+                        if ($supportsGlobal) {
+                            $builder->where(function ($q) use ($table) {
+                                $q->whereNull($table.'.branch_id')
+                                    ->orWhere($table.'.branch_id', session('active_branch_id'));
+                            });
+                        } else {
+                            $builder->where($table.'.branch_id', session('active_branch_id'));
+                        }
                     }
                 } else {
-                    // Non-owners are strictly constrained to their active session branch or assigned branches
+                    // Non-owners are strictly constrained to active branch / assigned branches + global records if supported
                     if (session()->has('active_branch_id') && session('active_branch_id') !== null) {
-                        $builder->where($builder->getModel()->getTable().'.branch_id', session('active_branch_id'));
+                        if ($supportsGlobal) {
+                            $builder->where(function ($q) use ($table) {
+                                $q->whereNull($table.'.branch_id')
+                                    ->orWhere($table.'.branch_id', session('active_branch_id'));
+                            });
+                        } else {
+                            $builder->where($table.'.branch_id', session('active_branch_id'));
+                        }
                     } else {
                         $assignedBranchIds = $user->branches->pluck('id')->toArray();
-                        $builder->whereIn($builder->getModel()->getTable().'.branch_id', $assignedBranchIds);
+                        if ($supportsGlobal) {
+                            $builder->where(function ($q) use ($table, $assignedBranchIds) {
+                                $q->whereNull($table.'.branch_id')
+                                    ->orWhereIn($table.'.branch_id', $assignedBranchIds);
+                            });
+                        } else {
+                            $builder->whereIn($table.'.branch_id', $assignedBranchIds);
+                        }
                     }
                 }
             }
