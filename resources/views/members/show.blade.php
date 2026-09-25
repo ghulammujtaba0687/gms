@@ -129,6 +129,34 @@
         </div>
     </div>
 
+    <!-- Assigned Personal Trainer (PT) Section -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
+        <div class="flex justify-between items-center border-b pb-3">
+            <div>
+                <span class="text-xs text-gray-500 uppercase font-bold block">Personal Trainer (PT Coach)</span>
+                <h3 class="text-base font-bold text-gray-900">
+                    {{ $member->currentTrainerAssignment->trainerProfile->user->name ?? 'No Personal Trainer Assigned' }}
+                </h3>
+            </div>
+
+            @can('create', App\Models\StaffProfile::class)
+                <form action="{{ route('trainer.assign') }}" method="POST" class="flex items-center gap-2">
+                    @csrf
+                    <input type="hidden" name="member_id" value="{{ $member->id }}">
+                    <select name="staff_profile_id" required class="border border-gray-300 rounded px-2 py-1 text-xs bg-white">
+                        <option value="">-- Choose Trainer --</option>
+                        @foreach(\App\Models\StaffProfile::where('is_trainer', true)->where('status', 'active')->get() as $trn)
+                            <option value="{{ $trn->id }}">{{ $trn->user->name ?? 'Trainer' }} ({{ $trn->specialization ?? $trn->staff_code }})</option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-3 py-1.5 rounded shadow-sm">
+                        Assign PT
+                    </button>
+                </form>
+            @endcan
+        </div>
+    </div>
+
     <!-- Financial Dues Summary Card -->
     @if($member->total_outstanding_dues > 0)
         <div class="bg-red-50 p-4 rounded-lg border border-red-200 flex justify-between items-center">
