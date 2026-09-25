@@ -10,7 +10,9 @@ use App\Models\Membership;
 use App\Models\Payment;
 use App\Models\Refund;
 use App\Services\AuditLogService;
+use App\Services\NotificationService;
 use App\Services\PaymentCodeService;
+use App\Services\SettingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -139,6 +141,19 @@ class PaymentController extends Controller
             null,
             $payment->toArray()
         );
+
+        // System Notification on Payment Confirmation (Phase 13)
+        if (SettingService::get('enable_payment_notifications', true, $member->branch_id)) {
+            app(NotificationService::class)->createNotification([
+                'branch_id' => $member->branch_id,
+                'type' => 'payment_received',
+                'title' => 'Payment Received: '.$payment->payment_code,
+                'message' => 'Payment of PKR '.number_format($amountPaid, 2)." received for member {$member->full_name}. Remaining balance: PKR ".number_format($remainingBalance, 2).'.',
+                'idempotency_key' => "payment_rec_{$payment->id}",
+                'notifiable_type' => Member::class,
+                'notifiable_id' => $member->id,
+            ]);
+        }
 
         return redirect()->route('payments.show', $payment->id)->with('success', 'Payment recorded successfully with Code: '.$paymentCode);
     }

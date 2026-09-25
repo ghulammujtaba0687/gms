@@ -18,7 +18,7 @@
 </head>
 <body onload="window.print()">
     <div class="header">
-        <div class="title">{{ $gymProfile->name ?? 'GMS GYM' }}</div>
+        <div class="title">{{ \App\Services\SettingService::get('gym_name', $gymProfile->name ?? 'GMS GYM') }}</div>
         <div class="subtitle">{{ $payroll->branch->name ?? '' }} — STAFF SALARY PAYSLIP</div>
     </div>
 

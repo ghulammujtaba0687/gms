@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests\Attendance;
 
+use App\Models\Attendance;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CheckInRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('checkIn', \App\Models\Attendance::class);
+        return $this->user()->can('checkIn', Attendance::class);
     }
 
     public function rules(): array

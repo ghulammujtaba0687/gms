@@ -49,9 +49,10 @@ class MembershipFreezeService
                 ]);
             }
 
-            if ($frozenDays > 30) {
+            $maxFreezeDays = (int) SettingService::get('freeze_max_days', 30);
+            if ($frozenDays > $maxFreezeDays) {
                 throw ValidationException::withMessages([
-                    'freeze_end_date' => 'Maximum freeze duration is 30 days.',
+                    'freeze_end_date' => "Maximum freeze duration is {$maxFreezeDays} days.",
                 ]);
             }
 

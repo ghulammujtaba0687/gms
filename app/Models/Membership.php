@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Traits\BelongsToBranch;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Membership extends Model
@@ -66,19 +68,19 @@ class Membership extends Model
         return $this->belongsTo(User::class, 'cancelled_by');
     }
 
-    public function attendances(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function attendances(): HasMany
     {
         return $this->hasMany(Attendance::class);
     }
 
-    public function freezes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function freezes(): HasMany
     {
         return $this->hasMany(MembershipFreeze::class);
     }
 
     public function isCurrentlyFrozen(): bool
     {
-        $today = \Carbon\Carbon::today()->format('Y-m-d');
+        $today = Carbon::today()->format('Y-m-d');
 
         return $this->freezes()
             ->whereIn('status', ['approved', 'active'])

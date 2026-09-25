@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\Expense;
+use App\Models\Payment;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -11,25 +14,25 @@ class DashboardController extends Controller
         $activeBranchId = session('active_branch_id');
         $activeBranch = $activeBranchId ? Branch::find($activeBranchId) : null;
 
-        $today = \Carbon\Carbon::today()->toDateString();
-        $startOfMonth = \Carbon\Carbon::now()->startOfMonth()->toDateString();
-        $endOfMonth = \Carbon\Carbon::now()->endOfMonth()->toDateString();
+        $today = Carbon::today()->toDateString();
+        $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
+        $endOfMonth = Carbon::now()->endOfMonth()->toDateString();
 
         // Calculate Revenue Metrics
-        $todayRevenue = \App\Models\Payment::where('payment_date', $today)
+        $todayRevenue = Payment::where('payment_date', $today)
             ->whereIn('status', ['paid', 'partial'])
             ->sum('amount_paid');
 
-        $monthRevenue = \App\Models\Payment::whereBetween('payment_date', [$startOfMonth, $endOfMonth])
+        $monthRevenue = Payment::whereBetween('payment_date', [$startOfMonth, $endOfMonth])
             ->whereIn('status', ['paid', 'partial'])
             ->sum('amount_paid');
 
         // Calculate Expense Metrics
-        $todayExpense = \App\Models\Expense::where('expense_date', $today)
+        $todayExpense = Expense::where('expense_date', $today)
             ->where('status', 'approved')
             ->sum('amount');
 
-        $monthExpense = \App\Models\Expense::whereBetween('expense_date', [$startOfMonth, $endOfMonth])
+        $monthExpense = Expense::whereBetween('expense_date', [$startOfMonth, $endOfMonth])
             ->where('status', 'approved')
             ->sum('amount');
 

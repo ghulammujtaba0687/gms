@@ -1,20 +1,23 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BranchContextController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\MembershipFreezeController;
+use App\Http\Controllers\MembershipPlanController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TrainerAssignmentController;
-use App\Http\Controllers\MembershipFreezeController;
-use App\Http\Controllers\MembershipController;
-use App\Http\Controllers\MembershipPlanController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\CheckBranchAccess;
 use App\Http\Middleware\EnsureBranchContext;
 use App\Http\Middleware\EnsureUserIsActive;
@@ -88,4 +91,17 @@ Route::middleware(['auth', EnsureUserIsActive::class, EnsureBranchContext::class
     Route::get('/reports/expiring', [ReportController::class, 'expiring'])->name('reports.expiring');
     Route::get('/reports/dues', [ReportController::class, 'dues'])->name('reports.dues');
     Route::get('/reports/attendance', [ReportController::class, 'attendance'])->name('reports.attendance');
+
+    // Settings & Branding Portal (Phase 12)
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [SettingController::class, 'store'])->name('settings.update');
+
+    // System Audit Logs Portal (Phase 12)
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
+
+    // System Notifications Portal (Phase 13)
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 });

@@ -6,6 +6,7 @@ use App\Traits\BelongsToBranch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Expense extends Model
@@ -60,7 +61,7 @@ class Expense extends Model
         return $this->belongsTo(User::class, 'approved_by');
     }
 
-    public function payroll(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function payroll(): HasOne
     {
         return $this->hasOne(Payroll::class);
     }

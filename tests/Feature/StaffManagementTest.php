@@ -8,7 +8,7 @@ use App\Models\Member;
 use App\Models\Role;
 use App\Models\StaffProfile;
 use App\Models\User;
-
+use App\Services\StaffCodeService;
 use Database\Seeders\RoleAndPermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -18,12 +18,19 @@ class StaffManagementTest extends TestCase
     use RefreshDatabase;
 
     protected GymProfile $gym;
+
     protected Branch $branch1;
+
     protected Branch $branch2;
+
     protected User $owner;
+
     protected User $manager;
+
     protected User $receptionist;
+
     protected User $trainer;
+
     protected Member $member1;
 
     protected function setUp(): void
@@ -88,7 +95,7 @@ class StaffManagementTest extends TestCase
 
     public function test_concurrency_safe_trainer_code_generation(): void
     {
-        $codeService = new \App\Services\StaffCodeService;
+        $codeService = new StaffCodeService;
         $trnCode1 = $codeService->generate($this->branch1->id, true);
         $stfCode1 = $codeService->generate($this->branch1->id, false);
 

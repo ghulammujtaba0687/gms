@@ -72,5 +72,17 @@
                 Branches
             </a>
         @endcan
+
+        @can('viewAny', App\Models\Setting::class)
+            <a href="{{ route('settings.index') }}" class="block px-3 py-2 rounded-md hover:bg-slate-800 text-sm font-medium {{ request()->routeIs('settings.*') ? 'bg-slate-800 text-white' : 'text-slate-300' }}">
+                System Settings
+            </a>
+        @endcan
+
+        @can('viewAny', App\Models\ActivityLog::class)
+            <a href="{{ route('audit-logs.index') }}" class="block px-3 py-2 rounded-md hover:bg-slate-800 text-sm font-medium {{ request()->routeIs('audit-logs.*') ? 'bg-slate-800 text-white' : 'text-slate-300' }}">
+                Audit Logs
+            </a>
+        @endcan
     </nav>
 </aside>
