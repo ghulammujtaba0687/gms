@@ -8,6 +8,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TrainerAssignmentController;
 use App\Http\Controllers\MembershipFreezeController;
@@ -80,4 +81,11 @@ Route::middleware(['auth', EnsureUserIsActive::class, EnsureBranchContext::class
     Route::get('/payrolls/{payroll}/payslip', [PayrollController::class, 'payslip'])->name('payrolls.payslip');
     Route::post('/payrolls/{payroll}/cancel', [PayrollController::class, 'cancel'])->name('payrolls.cancel');
     Route::resource('payrolls', PayrollController::class);
+
+    // Reports & Financial Analytics System (Phase 11)
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/revenue', [ReportController::class, 'revenue'])->name('reports.revenue');
+    Route::get('/reports/expiring', [ReportController::class, 'expiring'])->name('reports.expiring');
+    Route::get('/reports/dues', [ReportController::class, 'dues'])->name('reports.dues');
+    Route::get('/reports/attendance', [ReportController::class, 'attendance'])->name('reports.attendance');
 });
