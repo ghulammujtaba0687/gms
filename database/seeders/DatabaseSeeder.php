@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleAndPermissionSeeder::class,
             InitialGymSetupSeeder::class,
+            ExpenseCategorySeeder::class,
         ]);
     }
 }

@@ -14,21 +14,19 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div class="text-gray-500 text-sm font-medium">System Status</div>
-            <div class="text-2xl font-bold text-gray-900 mt-2">Active</div>
+            <div class="text-gray-500 text-sm font-medium">Today's Revenue</div>
+            <div class="text-2xl font-bold text-green-600 mt-2">PKR {{ number_format($todayRevenue, 2) }}</div>
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div class="text-gray-500 text-sm font-medium">Current Role</div>
-            <div class="text-2xl font-bold text-indigo-600 mt-2">
-                {{ auth()->user()->roles->first()->display_name ?? 'User' }}
-            </div>
+            <div class="text-gray-500 text-sm font-medium">Today's Expenses</div>
+            <div class="text-2xl font-bold text-red-600 mt-2">PKR {{ number_format($todayExpense, 2) }}</div>
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <div class="text-gray-500 text-sm font-medium">Assigned Branches</div>
-            <div class="text-2xl font-bold text-gray-900 mt-2">
-                {{ auth()->user()->hasRole('owner') ? 'All (Owner)' : auth()->user()->branches->count() }}
+            <div class="text-gray-500 text-sm font-medium">Net Monthly Cashflow</div>
+            <div class="text-2xl font-bold {{ $netMonthlyCashflow >= 0 ? 'text-indigo-600' : 'text-red-700' }} mt-2">
+                PKR {{ number_format($netMonthlyCashflow, 2) }}
             </div>
         </div>
     </div>
