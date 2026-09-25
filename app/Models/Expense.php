@@ -59,4 +59,9 @@ class Expense extends Model
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
+
+    public function payroll(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Payroll::class);
+    }
 }
