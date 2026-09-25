@@ -50,4 +50,9 @@ class StaffProfile extends Model
     {
         return $this->hasMany(TrainerMemberAssignment::class, 'staff_profile_id');
     }
+
+    public function payrolls(): HasMany
+    {
+        return $this->hasMany(Payroll::class);
+    }
 }
