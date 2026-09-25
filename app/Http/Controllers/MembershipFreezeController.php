@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MembershipFreeze\CancelFreezeRequest;
 use App\Http\Requests\MembershipFreeze\StoreFreezeRequest;
+use App\Models\Member;
 use App\Models\Membership;
 use App\Models\MembershipFreeze;
 use App\Services\AuditLogService;
 use App\Services\MembershipFreezeService;
+use App\Services\NotificationService;
+use App\Services\SettingService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -86,6 +89,19 @@ class MembershipFreezeController extends Controller
             $oldData,
             $approvedFreeze->toArray()
         );
+
+        // System Notification on Freeze Approval (Phase 13)
+        if (SettingService::get('enable_freeze_notifications', true, $approvedFreeze->branch_id)) {
+            app(NotificationService::class)->createNotification([
+                'branch_id' => $approvedFreeze->branch_id,
+                'type' => 'freeze_approved',
+                'title' => 'Membership Freeze Approved',
+                'message' => "Freeze approved for member {$approvedFreeze->member->full_name} for {$approvedFreeze->frozen_days} days ({$approvedFreeze->freeze_start_date} to {$approvedFreeze->freeze_end_date}).",
+                'idempotency_key' => "freeze_app_{$approvedFreeze->id}",
+                'notifiable_type' => Member::class,
+                'notifiable_id' => $approvedFreeze->member_id,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Membership freeze approved & subscription expiry extended.');
     }

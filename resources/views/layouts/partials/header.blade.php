@@ -6,6 +6,9 @@
     </div>
 
     <div class="flex items-center gap-4">
+        <!-- Notification Bell -->
+        @include('layouts.partials.notification-bell')
+
         <!-- Branch Switcher -->
         @include('layouts.partials.branch-switcher')
 
