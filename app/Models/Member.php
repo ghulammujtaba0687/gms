@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Member extends Model
@@ -62,17 +63,17 @@ class Member extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function attendances(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function attendances(): HasMany
     {
         return $this->hasMany(Attendance::class);
     }
 
-    public function trainerAssignments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function trainerAssignments(): HasMany
     {
         return $this->hasMany(TrainerMemberAssignment::class);
     }
 
-    public function currentTrainerAssignment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function currentTrainerAssignment(): HasOne
     {
         return $this->hasOne(TrainerMemberAssignment::class)->where('status', 'active')->latestOfMany();
     }

@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests\MembershipFreeze;
 
+use App\Models\MembershipFreeze;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreFreezeRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', \App\Models\MembershipFreeze::class);
+        return $this->user()->can('create', MembershipFreeze::class);
     }
 
     public function rules(): array

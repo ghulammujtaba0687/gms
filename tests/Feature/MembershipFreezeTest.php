@@ -21,13 +21,21 @@ class MembershipFreezeTest extends TestCase
     use RefreshDatabase;
 
     protected GymProfile $gym;
+
     protected Branch $branch1;
+
     protected Branch $branch2;
+
     protected User $owner;
+
     protected User $manager;
+
     protected User $receptionist;
+
     protected User $trainer;
+
     protected Member $member1;
+
     protected MembershipPlan $planMonthly;
 
     protected function setUp(): void

@@ -18,12 +18,19 @@ class PayrollManagementTest extends TestCase
     use RefreshDatabase;
 
     protected GymProfile $gym;
+
     protected Branch $branch1;
+
     protected Branch $branch2;
+
     protected User $owner;
+
     protected User $manager;
+
     protected User $receptionist;
+
     protected User $trainer;
+
     protected StaffProfile $staff1;
 
     protected function setUp(): void

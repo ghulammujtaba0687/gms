@@ -8,7 +8,6 @@ use App\Services\AuditLogService;
 use App\Services\ReportExportService;
 use App\Services\ReportQueryService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ReportController extends Controller

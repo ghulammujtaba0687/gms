@@ -2,13 +2,14 @@
 
 namespace App\Http\Requests\Payroll;
 
+use App\Models\Payroll;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePayrollRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()->can('create', \App\Models\Payroll::class);
+        return $this->user()->can('create', Payroll::class);
     }
 
     public function rules(): array

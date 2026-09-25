@@ -14,7 +14,7 @@
 </head>
 <body onload="window.print()">
     <div class="header">
-        <div class="title">{{ $gymProfile->name ?? 'GMS GYM' }}</div>
+        <div class="title">{{ \App\Services\SettingService::get('gym_name', $gymProfile->name ?? 'GMS GYM') }}</div>
         <div>{{ $payment->branch->name ?? '' }}</div>
         <div>{{ $payment->branch->phone ?? '' }}</div>
     </div>
@@ -33,8 +33,7 @@
     <div class="row"><span class="bold">Method:</span> <span style="text-transform: uppercase;">{{ $payment->payment_method }}</span></div>
 
     <div class="footer">
-        <p>Thank you for your business!</p>
-        <p>This is a computer generated receipt.</p>
+        <p>{{ \App\Services\SettingService::get('receipt_footer_terms', \App\Services\SettingService::get('receipt_footer', 'Thank you for your business! This is a computer generated receipt.')) }}</p>
     </div>
 </body>
 </html>
