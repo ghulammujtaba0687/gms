@@ -51,6 +51,13 @@ class AttendanceService
                 throw ValidationException::withMessages(['membership' => $msg]);
             }
 
+            // Check if active membership is currently FROZEN
+            if ($activeMembership->isCurrentlyFrozen()) {
+                throw ValidationException::withMessages([
+                    'freeze' => 'Check-in blocked: Member subscription is currently FROZEN. Unfreeze or wait until freeze period ends.',
+                ]);
+            }
+
             // Check if member ALREADY has an open attendance session (status = present)
             $openAttendance = Attendance::where('member_id', $member->id)
                 ->where('status', 'present')
