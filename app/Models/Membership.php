@@ -70,4 +70,21 @@ class Membership extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function freezes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(MembershipFreeze::class);
+    }
+
+    public function isCurrentlyFrozen(): bool
+    {
+        $today = \Carbon\Carbon::today()->format('Y-m-d');
+
+        return $this->freezes()
+            ->whereIn('status', ['approved', 'active'])
+            ->where('freeze_start_date', '<=', $today)
+            ->where('freeze_end_date', '>=', $today)
+            ->whereNull('deleted_at')
+            ->exists();
+    }
 }

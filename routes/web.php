@@ -6,6 +6,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MembershipFreezeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipPlanController;
 use App\Http\Controllers\PaymentController;
@@ -57,4 +58,9 @@ Route::middleware(['auth', EnsureUserIsActive::class, EnsureBranchContext::class
     // Attendance & Member Check-In (Phase 6)
     Route::post('/attendances/{attendance}/checkout', [AttendanceController::class, 'checkout'])->name('attendances.checkout');
     Route::resource('attendances', AttendanceController::class)->except(['show']);
+
+    // Membership Freezes / Pause Management (Phase 7)
+    Route::post('/membership-freezes/{membershipFreeze}/approve', [MembershipFreezeController::class, 'approve'])->name('membership-freezes.approve');
+    Route::post('/membership-freezes/{membershipFreeze}/cancel', [MembershipFreezeController::class, 'cancel'])->name('membership-freezes.cancel');
+    Route::resource('membership-freezes', MembershipFreezeController::class)->except(['show', 'edit', 'update']);
 });

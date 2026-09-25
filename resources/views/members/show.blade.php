@@ -144,6 +144,80 @@
         </div>
     @endif
 
+    <!-- Membership Freezes Log Section -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
+        <div class="flex justify-between items-center border-b pb-3">
+            <h3 class="text-md font-bold text-gray-800">Membership Freeze / Pause History</h3>
+            @can('create', App\Models\MembershipFreeze::class)
+                @if($member->memberships()->where('status', 'active')->first())
+                    <a href="{{ route('membership-freezes.create', ['membership_id' => $member->memberships()->where('status', 'active')->first()->id]) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium px-3 py-1.5 rounded shadow-sm">
+                        + Request Freeze
+                    </a>
+                @endif
+            @endcan
+        </div>
+
+        <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+            <thead class="bg-gray-50 text-gray-600 font-medium">
+                <tr>
+                    <th class="px-4 py-2">Start Date</th>
+                    <th class="px-4 py-2">End Date</th>
+                    <th class="px-4 py-2">Days</th>
+                    <th class="px-4 py-2">Reason</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @forelse($member->memberships()->flatMap->freezes as $fz)
+                    <tr>
+                        <td class="px-4 py-3 font-medium text-gray-900">{{ $fz->freeze_start_date->format('Y-m-d') }}</td>
+                        <td class="px-4 py-3">{{ $fz->freeze_end_date->format('Y-m-d') }}</td>
+                        <td class="px-4 py-3 font-bold text-gray-800">{{ $fz->frozen_days }} Days</td>
+                        <td class="px-4 py-3 text-xs text-gray-600">{{ $fz->reason }}</td>
+                        <td class="px-4 py-3">
+                            @if($fz->status === 'approved')
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-bold">Approved</span>
+                            @elseif($fz->status === 'pending')
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded-full font-medium">Pending Approval</span>
+                            @else
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded-full font-medium">Cancelled</span>
+                            @endif
+                        </td>
+                        <td class="px-4 py-3">
+                            @can('approve', $fz)
+                                @if($fz->status === 'pending')
+                                    <form action="{{ route('membership-freezes.approve', $fz->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        <button type="submit" class="bg-green-600 text-white font-bold text-xs px-2.5 py-1 rounded shadow-sm">
+                                            Approve
+                                        </button>
+                                    </form>
+                                @endif
+                            @endcan
+
+                            @can('cancel', $fz)
+                                @if(in_array($fz->status, ['approved', 'pending']))
+                                    <form action="{{ route('membership-freezes.cancel', $fz->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Cancel this freeze?')">
+                                        @csrf
+                                        <input type="hidden" name="cancellation_reason" value="User/Manager requested unfreeze">
+                                        <button type="submit" class="text-red-600 hover:underline font-medium text-xs">
+                                            Cancel Freeze
+                                        </button>
+                                    </form>
+                                @endif
+                            @endcan
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-4 py-3 text-center text-gray-500">No freeze records for this member.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
     <!-- Attendance History Section -->
     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 space-y-4">
         <div class="flex justify-between items-center border-b pb-3">
