@@ -67,6 +67,16 @@ class Member extends Model
         return $this->hasMany(Attendance::class);
     }
 
+    public function trainerAssignments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(TrainerMemberAssignment::class);
+    }
+
+    public function currentTrainerAssignment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(TrainerMemberAssignment::class)->where('status', 'active')->latestOfMany();
+    }
+
     public function getTotalOutstandingDuesAttribute(): float
     {
         return (float) $this->payments()->where('remaining_balance', '>', 0)->whereIn('status', ['paid', 'partial', 'pending_verification'])->sum('remaining_balance');

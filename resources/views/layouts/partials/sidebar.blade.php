@@ -43,6 +43,12 @@
             </a>
         @endcan
 
+        @can('viewAny', App\Models\StaffProfile::class)
+            <a href="{{ route('staff.index') }}" class="block px-3 py-2 rounded-md hover:bg-slate-800 text-sm font-medium {{ request()->routeIs('staff.*') ? 'bg-slate-800 text-white' : 'text-slate-300' }}">
+                Staff & Trainers
+            </a>
+        @endcan
+
         @can('viewAny', App\Models\MembershipPlan::class)
             <a href="{{ route('membership-plans.index') }}" class="block px-3 py-2 rounded-md hover:bg-slate-800 text-sm font-medium {{ request()->routeIs('membership-plans.*') ? 'bg-slate-800 text-white' : 'text-slate-300' }}">
                 Membership Plans

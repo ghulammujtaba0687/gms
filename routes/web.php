@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\TrainerAssignmentController;
 use App\Http\Controllers\MembershipFreezeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipPlanController;
@@ -68,4 +70,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, EnsureBranchContext::class
     // Expense Management System (Phase 8)
     Route::post('/expenses/{expense}/approve', [ExpenseController::class, 'approve'])->name('expenses.approve');
     Route::resource('expenses', ExpenseController::class);
+
+    // Staff & Trainer Management (Phase 9)
+    Route::post('/trainer/assign', [TrainerAssignmentController::class, 'assign'])->name('trainer.assign');
+    Route::resource('staff', StaffController::class);
 });
