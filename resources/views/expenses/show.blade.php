@@ -88,8 +88,8 @@
         @if($expense->receipt_path)
             <div class="pt-4 border-t">
                 <span class="text-sm font-medium text-gray-700 block mb-2">Receipt Attachment</span>
-                <a href="{{ asset('storage/' . $expense->receipt_path) }}" target="_blank" class="text-indigo-600 hover:underline text-sm font-medium">
-                    📎 View Attached Receipt / Bill Proof
+                <a href="{{ route('files.expenses.receipt', $expense->id) }}" target="_blank" class="text-indigo-600 hover:underline text-sm font-medium">
+                    🔒 View Secure Receipt / Bill Proof
                 </a>
             </div>
         @endif

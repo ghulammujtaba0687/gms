@@ -81,8 +81,8 @@
         @if($payment->proof_path)
             <div class="pt-4 border-t">
                 <span class="text-sm font-medium text-gray-700 block mb-2">Proof Attachment</span>
-                <a href="{{ asset('storage/' . $payment->proof_path) }}" target="_blank" class="text-indigo-600 hover:underline text-sm font-medium">
-                    📎 View Attached Transfer Proof
+                <a href="{{ route('files.payments.proof', $payment->id) }}" target="_blank" class="text-indigo-600 hover:underline text-sm font-medium">
+                    🔒 View Secure Transfer Proof
                 </a>
             </div>
         @endif

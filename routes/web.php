@@ -7,6 +7,7 @@ use App\Http\Controllers\BranchContextController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\HealthCheckController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\MembershipFreezeController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SecureFileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TrainerAssignmentController;
@@ -104,4 +106,11 @@ Route::middleware(['auth', EnsureUserIsActive::class, EnsureBranchContext::class
     Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])->name('notifications.unread-count');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+
+    // Secure File Streaming Routes (Phase 14)
+    Route::get('/files/payments/{payment}/proof', [SecureFileController::class, 'paymentProof'])->name('files.payments.proof');
+    Route::get('/files/expenses/{expense}/receipt', [SecureFileController::class, 'expenseReceipt'])->name('files.expenses.receipt');
 });
+
+// System Health Check Endpoint (Public / Unauthenticated for uptime monitoring)
+Route::get('/health', [HealthCheckController::class, 'check'])->name('health');

@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('gms:send-reminders')->dailyAt('08:00');
+Schedule::command('gms:backup')->weeklyOn(0, '02:00');
